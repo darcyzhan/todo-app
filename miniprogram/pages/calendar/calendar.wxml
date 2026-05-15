@@ -1,0 +1,53 @@
+<view class="page container">
+  <!-- Month Header -->
+  <view class="calendar-header">
+    <text class="nav-btn" bindtap="onPrevMonth">◀</text>
+    <text class="month-title">{{year}}年{{month + 1}}月</text>
+    <text class="nav-btn" bindtap="onNextMonth">▶</text>
+    <text class="today-btn" bindtap="onToday">今天</text>
+  </view>
+
+  <!-- Week Headers -->
+  <view class="week-headers">
+    <text wx:for="{{weekHeaders}}" wx:key="*this" class="week-header">{{item}}</text>
+  </view>
+
+  <!-- Calendar Grid -->
+  <view class="calendar-grid">
+    <view
+      wx:for="{{calendarDays}}"
+      wx:key="index"
+      class="day-cell {{item.type}} {{item.isToday ? 'today' : ''}} {{selectedDate === item.date ? 'selected' : ''}} {{tasksByDate[item.date]?.length ? 'has-tasks' : ''}}"
+      bindtap="onDayTap"
+      data-date="{{item.date}}"
+    >
+      <text class="day-number">{{item.day}}</text>
+      <view class="day-dots" wx:if="{{tasksByDate[item.date]?.length}}">
+        <view class="dot" wx:for="{{tasksByDate[item.date].slice(0, 3)}}" wx:for-item="t" wx:key="id" style="background: {{t.priority === 'P0' ? '#E17055' : t.priority === 'P1' ? '#FDCB6E' : '#74B9FF'}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Selected Date Tasks -->
+  <view class="date-tasks" wx:if="{{selectedDate}}">
+    <text class="date-title">{{selectedDate}} 的任务</text>
+    <view
+      wx:for="{{selectedTasks}}"
+      wx:key="id"
+      class="task-item card"
+      bindtap="goDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="task-left">
+        <view class="priority-dot" style="background: {{item.priority === 'P0' ? '#E17055' : item.priority === 'P1' ? '#FDCB6E' : '#74B9FF'}}"></view>
+        <text class="task-name {{item.status === 'done' ? 'done' : ''}}">{{item.title}}</text>
+      </view>
+      <text class="task-status">{{item.status === 'done' ? '✓' : ''}}</text>
+    </view>
+    <view class="empty-hint" wx:if="{{!selectedTasks.length}}">
+      <text>这天没有任务</text>
+    </view>
+  </view>
+</view>
+
+<view class="fab" bindtap="onCreateTask">+</view>

@@ -1,0 +1,21 @@
+<view class="page container">
+  <text class="page-title">📁 项目管理</text>
+  <view class="project-list">
+    <view class="project-card card" wx:for="{{projects}}" wx:key="id" bindtap="onProjectTap" data-id="{{item.id}}">
+      <text class="project-icon">{{item.icon}}</text>
+      <view class="project-info"><text class="project-name">{{item.name}}</text><text class="project-desc text-secondary">{{item.status}}</text></view>
+      <text class="delete-btn" catchtap="onDelete" data-id="{{item.id}}">🗑</text>
+    </view>
+  </view>
+  <view class="empty-state" wx:if="{{!projects.length}}"><text class="empty-state-icon">📁</text><text class="empty-state-text">还没有项目</text></view>
+  <view class="fab" bindtap="onShowCreate">+</view>
+  <view class="modal-overlay" wx:if="{{showCreate}}" bindtap="onHideCreate"><view class="modal-content card" catchtap>
+    <text class="modal-title">新建项目</text>
+    <input class="form-input" placeholder="项目名称" value="{{newName}}" bindinput="onNameInput" />
+    <text class="form-label">图标</text>
+    <view class="icon-grid"><text wx:for="{{icons}}" wx:key="*this" class="icon-opt {{newIcon === item ? 'sel' : ''}}" bindtap="onIconSelect" data-icon="{{item}}">{{item}}</text></view>
+    <text class="form-label">颜色</text>
+    <view class="color-grid"><view wx:for="{{colors}}" wx:key="*this" class="color-opt {{newColor === item ? 'sel' : ''}}" style="background:{{item}}" bindtap="onColorSelect" data-color="{{item}}"></view></view>
+    <button class="btn-primary" bindtap="onCreate">创建</button>
+  </view></view>
+</view>

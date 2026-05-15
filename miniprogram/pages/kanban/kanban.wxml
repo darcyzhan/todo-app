@@ -1,0 +1,40 @@
+<view class="page">
+  <scroll-view class="kanban-board" scroll-x>
+    <view class="kanban-columns">
+      <view wx:for="{{columns}}" wx:key="key" class="kanban-column">
+        <view class="column-header" style="border-top: 6rpx solid {{item.key === 'todo' ? 'var(--text-hint)' : item.key === 'in_progress' ? 'var(--info)' : 'var(--success)'}}">
+          <text class="column-title">{{item.icon}} {{item.title}}</text>
+          <text class="column-count">{{item.tasks.length}}</text>
+        </view>
+        <scroll-view class="column-body" scroll-y>
+          <view
+            wx:for="{{item.tasks}}"
+            wx:for-item="task"
+            wx:key="id"
+            class="kanban-card card"
+            bindtap="onTaskTap"
+            data-id="{{task.id}}"
+          >
+            <view class="kanban-card-header">
+              <text class="kanban-card-title ellipsis">{{task.title}}</text>
+              <view class="priority-dot" style="background: {{task.priority === 'P0' ? '#E17055' : task.priority === 'P1' ? '#FDCB6E' : '#74B9FF'}}"></view>
+            </view>
+            <view class="kanban-card-meta" wx:if="{{task.due_date}}">
+              <text class="kanban-due">📅 {{task.due_date}}</text>
+            </view>
+            <view class="kanban-card-tags" wx:if="{{task.tags.length}}">
+              <view wx:for="{{task.tags}}" wx:for-item="tag" wx:key="id" class="mini-tag" style="background: {{tag.color}}20; color: {{tag.color}};">{{tag.name}}</view>
+            </view>
+            <view class="kanban-move-btns">
+              <text class="move-btn" wx:if="{{item.key !== 'todo'}}" catchtap="onMoveLeft" data-task-id="{{task.id}}" data-current-status="{{item.key}}">◀</text>
+              <text class="move-btn" wx:if="{{item.key !== 'done'}}" catchtap="onMoveRight" data-task-id="{{task.id}}" data-current-status="{{item.key}}">▶</text>
+            </view>
+          </view>
+          <view class="empty-column" wx:if="{{!item.tasks.length}}">
+            <text>暂无任务</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

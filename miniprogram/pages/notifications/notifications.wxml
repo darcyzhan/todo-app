@@ -1,0 +1,7 @@
+<view class="page container">
+  <view class="header"><text class="title">🔔 通知</text><text class="read-all" bindtap="onReadAll">全部已读</text></view>
+  <view class="notif-list"><view class="notif-item card {{item.is_read ? '' : 'unread'}}" wx:for="{{notifications}}" wx:key="id" bindtap="onRead" data-id="{{item.id}}">
+    <text class="notif-title">{{item.title}}</text><text class="notif-content text-secondary">{{item.content}}</text><text class="notif-time text-hint">{{item.created_at}}</text>
+  </view></view>
+  <view class="empty-state" wx:if="{{!notifications.length}}"><text class="empty-state-icon">🔔</text><text class="empty-state-text">暂无通知</text></view>
+</view>

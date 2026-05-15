@@ -1,0 +1,59 @@
+<view class="page">
+  <!-- Profile Header -->
+  <view class="profile-header" wx:if="{{isLoggedIn}}">
+    <view class="avatar">
+      <text class="avatar-text">{{userInfo.nickname[0] || '👤'}}</text>
+    </view>
+    <view class="user-info">
+      <text class="nickname">{{userInfo.nickname || '用户'}}</text>
+      <text class="membership">{{userInfo.membership === 'pro' ? '⭐ Pro 会员' : '免费版'}}</text>
+    </view>
+    <text class="logout-btn" bindtap="onLogout">退出</text>
+  </view>
+
+  <!-- Not logged in -->
+  <view class="login-prompt" wx:if="{{!isLoggedIn}}">
+    <text class="prompt-icon">👋</text>
+    <text class="prompt-text">登录后解锁全部功能</text>
+    <button class="btn-primary" bindtap="onLoginTap">登录 / 注册</button>
+  </view>
+
+  <!-- Quick Stats -->
+  <view class="quick-stats card" wx:if="{{stats}}">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.completion_rate}}%</text>
+      <text class="stat-label">完成率</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.week_done}}</text>
+      <text class="stat-label">本周完成</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.overdue}}</text>
+      <text class="stat-label">逾期</text>
+    </view>
+  </view>
+
+  <!-- Menu -->
+  <view class="menu-list card">
+    <view class="menu-item" wx:for="{{menuItems}}" wx:key="title" bindtap="onMenuTap" data-url="{{item.url}}">
+      <text class="menu-icon">{{item.icon}}</text>
+      <text class="menu-title">{{item.title}}</text>
+      <text class="menu-badge" wx:if="{{item.title === '通知中心' && unreadCount > 0}}">{{unreadCount}}</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- Login Modal -->
+  <view class="modal-overlay" wx:if="{{showLoginModal}}" bindtap="onCloseModal">
+    <view class="modal-content card" catchtap>
+      <text class="modal-title">{{isRegister ? '注册账号' : '登录'}}</text>
+      <input class="form-input" placeholder="用户名" value="{{loginForm.nickname}}" bindinput="onNicknameInput" />
+      <input class="form-input" placeholder="密码" type="password" value="{{loginForm.password}}" bindinput="onPasswordInput" />
+      <button class="btn-primary" bindtap="onLoginSubmit">{{isRegister ? '注册' : '登录'}}</button>
+      <text class="switch-text" bindtap="{{isRegister ? 'onSwitchToLogin' : 'onSwitchToRegister'}}">
+        {{isRegister ? '已有账号？去登录' : '没有账号？去注册'}}
+      </text>
+    </view>
+  </view>
+</view>

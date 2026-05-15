@@ -1,0 +1,171 @@
+<view class="page container">
+  <!-- NLP Quick Input -->
+  <view class="section">
+    <view class="section-header" bindtap="onToggleNlp">
+      <text class="section-title">🤖 智能输入</text>
+      <text class="toggle-arrow {{showNlp ? 'open' : ''}}">▼</text>
+    </view>
+    <view class="nlp-section" wx:if="{{showNlp}}">
+      <view class="nlp-input-wrap">
+        <input
+          class="nlp-input"
+          placeholder="如：明天下午3点开会 #工作 优先级高"
+          value="{{nlpInput}}"
+          bindinput="onNlpInput"
+          confirm-type="done"
+          bindconfirm="onNlpParse"
+        />
+        <button class="btn-primary btn-sm" bindtap="onNlpParse">解析</button>
+      </view>
+      <text class="nlp-hint">支持日期、优先级、标签自然语言</text>
+    </view>
+  </view>
+
+  <!-- Title -->
+  <view class="form-group">
+    <text class="form-label">标题 *</text>
+    <input class="form-input" placeholder="输入任务标题" value="{{title}}" bindinput="onTitleInput" />
+  </view>
+
+  <!-- Description -->
+  <view class="form-group">
+    <text class="form-label">描述</text>
+    <textarea class="form-textarea" placeholder="详细描述（支持Markdown）" value="{{description}}" bindinput="onDescInput" auto-height maxlength="-1" />
+  </view>
+
+  <!-- Priority -->
+  <view class="form-group">
+    <text class="form-label">优先级</text>
+    <view class="priority-selector">
+      <view
+        wx:for="{{priorities}}"
+        wx:key="value"
+        class="priority-option {{priority === item.value ? 'selected' : ''}}"
+        style="--p-color: {{item.color}}"
+        bindtap="onPrioritySelect"
+        data-value="{{item.value}}"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Project -->
+  <view class="form-group" wx:if="{{projects.length}}">
+    <text class="form-label">项目</text>
+    <view class="project-selector">
+      <view
+        wx:for="{{projects}}"
+        wx:key="id"
+        class="project-option {{projectId === item.id ? 'selected' : ''}}"
+        bindtap="onProjectSelect"
+        data-id="{{item.id}}"
+      >
+        {{item.icon}} {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Due Date -->
+  <view class="form-group">
+    <text class="form-label">截止时间</text>
+    <view class="date-row">
+      <picker mode="date" value="{{dueDate}}" bindchange="onDueDateChange">
+        <view class="date-picker-btn">
+          {{dueDate || '选择日期'}} 📅
+        </view>
+      </picker>
+      <picker mode="time" value="{{dueTime}}" bindchange="onDueTimeChange">
+        <view class="date-picker-btn">
+          {{dueTime || '选择时间'}} ⏰
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- Energy Level -->
+  <view class="form-group">
+    <text class="form-label">精力需求</text>
+    <view class="energy-selector">
+      <view
+        wx:for="{{energyLevels}}"
+        wx:key="value"
+        class="energy-option {{energyLevel === item.value ? 'selected' : ''}}"
+        bindtap="onEnergySelect"
+        data-value="{{item.value}}"
+      >
+        {{item.icon}} {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Tags -->
+  <view class="form-group" wx:if="{{tags.length}}">
+    <text class="form-label">标签</text>
+    <view class="tag-selector">
+      <view
+        wx:for="{{tags}}"
+        wx:key="id"
+        class="tag-option {{tagIds.indexOf(item.id) > -1 ? 'selected' : ''}}"
+        style="--tag-color: {{item.color}}"
+        bindtap="onTagToggle"
+        data-id="{{item.id}}"
+      >
+        {{item.icon || '#'}} {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Subtasks -->
+  <view class="form-group">
+    <text class="form-label">子任务</text>
+    <view class="subtask-list">
+      <view wx:for="{{subtasks}}" wx:key="index" class="subtask-row">
+        <text class="subtask-bullet">•</text>
+        <input
+          class="subtask-input"
+          placeholder="子任务 {{index + 1}}"
+          value="{{item}}"
+          bindinput="onSubtaskInput"
+          data-index="{{index}}"
+        />
+        <text
+          class="subtask-remove"
+          wx:if="{{subtasks.length > 1}}"
+          bindtap="onRemoveSubtask"
+          data-index="{{index}}"
+        >✕</text>
+      </view>
+    </view>
+    <text class="add-subtask" bindtap="onAddSubtask">+ 添加子任务</text>
+  </view>
+
+  <!-- Recurring -->
+  <view class="form-group">
+    <view class="recurring-header" bindtap="onRecurringToggle">
+      <text class="form-label">循环任务</text>
+      <view class="switch {{isRecurring ? 'on' : ''}}">
+        <view class="switch-dot"></view>
+      </view>
+    </view>
+    <view class="recurrence-options" wx:if="{{isRecurring}}">
+      <view
+        wx:for="{{recurrenceTypes}}"
+        wx:key="value"
+        class="recurrence-option {{recurrenceType === item.value ? 'selected' : ''}}"
+        bindtap="onRecurrenceType"
+        data-value="{{item.value}}"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- Submit -->
+  <button
+    class="btn-primary submit-btn"
+    bindtap="onSubmit"
+    loading="{{submitting}}"
+    disabled="{{submitting || !title.trim()}}"
+  >
+    {{submitting ? '创建中...' : '创建任务'}}
+  </button>
+</view>

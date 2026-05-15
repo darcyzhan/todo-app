@@ -1,0 +1,90 @@
+<view class="page container" wx:if="{{!loading && task}}">
+  <!-- Header -->
+  <view class="detail-header">
+    <view class="priority-badge priority-{{task.priority}}">{{task.priority_text}}</view>
+    <view class="status-badge status-{{task.status}}">{{task.status_text}}</view>
+  </view>
+
+  <!-- Title -->
+  <view class="detail-title {{task.status === 'done' ? 'done' : ''}}">{{task.title}}</view>
+
+  <!-- Meta -->
+  <view class="detail-meta card">
+    <view class="meta-item" wx:if="{{task.due_info}}">
+      <text class="meta-icon">📅</text>
+      <text class="meta-label">截止</text>
+      <text class="meta-value {{task.due_info.status === 'overdue' ? 'text-danger' : ''}}">{{task.due_info.text}}</text>
+    </view>
+    <view class="meta-item" wx:if="{{task.estimated_duration}}">
+      <text class="meta-icon">⏱</text>
+      <text class="meta-label">预估</text>
+      <text class="meta-value">{{task.estimated_duration}}分钟</text>
+    </view>
+    <view class="meta-item" wx:if="{{task.energy_level}}">
+      <text class="meta-icon">⚡</text>
+      <text class="meta-label">精力</text>
+      <text class="meta-value">{{task.energy_level === 'high' ? '高' : task.energy_level === 'medium' ? '中' : '低'}}</text>
+    </view>
+    <view class="meta-item">
+      <text class="meta-icon">📁</text>
+      <text class="meta-label">创建</text>
+      <text class="meta-value text-secondary">{{task.created_at}}</text>
+    </view>
+  </view>
+
+  <!-- Description -->
+  <view class="detail-section card" wx:if="{{task.description}}">
+    <text class="section-label">描述</text>
+    <text class="description-text">{{task.description}}</text>
+  </view>
+
+  <!-- Tags -->
+  <view class="detail-section card" wx:if="{{task.tags.length}}">
+    <text class="section-label">标签</text>
+    <view class="tag-list">
+      <view wx:for="{{task.tags}}" wx:key="id" class="tag-chip" style="background: {{item.color}}20; color: {{item.color}};">
+        {{item.icon || ''}} {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <!-- Subtasks -->
+  <view class="detail-section card">
+    <view class="section-header">
+      <text class="section-label">子任务 {{task.subtask_progress || ''}}</text>
+    </view>
+    <view class="subtask-list">
+      <view
+        wx:for="{{task.subtasks}}"
+        wx:key="id"
+        class="subtask-item {{item.is_completed ? 'completed' : ''}}"
+      >
+        <view class="subtask-check" catchtap="onToggleSubtask" data-id="{{item.id}}" data-completed="{{item.is_completed}}">
+          <text wx:if="{{item.is_completed}}" class="check-icon">✓</text>
+        </view>
+        <text class="subtask-text">{{item.title}}</text>
+        <text class="subtask-delete" catchtap="onDeleteSubtask" data-id="{{item.id}}">✕</text>
+      </view>
+    </view>
+    <view class="add-subtask-row">
+      <input class="subtask-input" placeholder="添加子任务..." value="{{newSubtaskTitle}}" bindinput="onSubtaskInput" confirm-type="done" bindconfirm="onAddSubtask" />
+      <text class="add-btn" bindtap="onAddSubtask">+</text>
+    </view>
+  </view>
+
+  <!-- Actions -->
+  <view class="action-bar">
+    <button class="action-btn btn-toggle" bindtap="onToggleStatus">
+      {{task.status === 'done' ? '↩ 重新打开' : '✓ 完成'}}
+    </button>
+    <button class="action-btn btn-edit" bindtap="onEditTask">✎ 编辑</button>
+    <button class="action-btn btn-share" bindtap="onShare">↗ 分享</button>
+    <button class="action-btn btn-delete" bindtap="onDeleteTask">🗑 删除</button>
+  </view>
+</view>
+
+<view class="loading-full" wx:if="{{loading}}">
+  <view class="skeleton skeleton-title"></view>
+  <view class="skeleton skeleton-text"></view>
+  <view class="skeleton skeleton-text short"></view>
+</view>

@@ -1,0 +1,12 @@
+<view class="page container">
+  <text class="page-title">⚙️ 设置</text>
+  <view class="setting-section card"><text class="section-title">外观</text>
+    <view class="theme-options"><view wx:for="{{themes}}" wx:key="value" class="theme-opt {{theme === item.value ? 'active' : ''}}" bindtap="onThemeChange" data-value="{{item.value}}">{{item.label}}</view></view>
+  </view>
+  <view class="setting-section card"><text class="section-title">数据</text>
+    <view class="setting-item" bindtap="onClearCache"><text>清除缓存</text><text class="text-hint">›</text></view>
+  </view>
+  <view class="setting-section card"><text class="section-title">关于</text>
+    <view class="setting-item" bindtap="onAbout"><text>关于 TodoMaster Pro</text><text class="text-hint">›</text></view>
+  </view>
+</view>

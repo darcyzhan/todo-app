@@ -1,0 +1,59 @@
+<view class="page container">
+  <text class="page-title">📊 数据统计</text>
+
+  <!-- Summary Cards -->
+  <view class="summary-grid">
+    <view class="summary-card card">
+      <text class="summary-value text-primary">{{dashboard.today_todo}}</text>
+      <text class="summary-label">今日待办</text>
+    </view>
+    <view class="summary-card card">
+      <text class="summary-value text-success">{{dashboard.week_done}}</text>
+      <text class="summary-label">本周完成</text>
+    </view>
+    <view class="summary-card card">
+      <text class="summary-value text-danger">{{dashboard.overdue}}</text>
+      <text class="summary-label">逾期任务</text>
+    </view>
+    <view class="summary-card card">
+      <text class="summary-value text-info">{{dashboard.completion_rate}}%</text>
+      <text class="summary-label">完成率</text>
+    </view>
+  </view>
+
+  <!-- Weekly Bar Chart -->
+  <view class="chart-card card">
+    <text class="chart-title">本周完成趋势</text>
+    <view class="bar-chart">
+      <view class="bar-item" wx:for="{{weeklyData}}" wx:key="index">
+        <view class="bar-wrap">
+          <view class="bar" style="height: {{item * 10}}rpx;"></view>
+        </view>
+        <text class="bar-label">{{weekLabels[index]}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Priority Distribution -->
+  <view class="chart-card card" wx:if="{{priorityDist.length}}">
+    <text class="chart-title">优先级分布</text>
+    <view class="dist-list">
+      <view class="dist-item" wx:for="{{priorityDist}}" wx:key="label">
+        <view class="dist-dot" style="background: {{item.color}}"></view>
+        <text class="dist-label">{{item.label}}</text>
+        <text class="dist-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Recent Completed -->
+  <view class="chart-card card" wx:if="{{recentCompleted.length}}">
+    <text class="chart-title">最近完成</text>
+    <view class="completed-list">
+      <view class="completed-item" wx:for="{{recentCompleted}}" wx:key="id">
+        <text class="completed-check">✓</text>
+        <text class="completed-title">{{item.title}}</text>
+      </view>
+    </view>
+  </view>
+</view>

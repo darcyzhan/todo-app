@@ -1,0 +1,5 @@
+<view class="page container">
+  <view class="search-bar"><input class="search-input" placeholder="搜索任务..." value="{{query}}" bindinput="onInput" focus="true" confirm-type="search" /></view>
+  <view class="results"><view class="result-item card" wx:for="{{results}}" wx:key="id" bindtap="onTaskTap" data-id="{{item.id}}"><text class="result-title">{{item.title}}</text><text class="result-status status-{{item.status}}">{{item.status}}</text></view></view>
+  <view class="empty-hint" wx:if="{{query && !results.length && !searching}}">没有找到匹配的任务</view>
+</view>

@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/task-detail/task-detail",
+    "pages/task-create/task-create",
+    "pages/calendar/calendar",
+    "pages/kanban/kanban",
+    "pages/focus/focus",
+    "pages/project/project",
+    "pages/habit/habit",
+    "pages/stats/stats",
+    "pages/search/search",
+    "pages/notifications/notifications",
+    "pages/settings/settings",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#6C5CE7",
+    "navigationBarTitleText": "TodoMaster Pro",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F8F9FE"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#6C5CE7",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "待办",
+        "iconPath": "assets/icons/todo.png",
+        "selectedIconPath": "assets/icons/todo-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "日历",
+        "iconPath": "assets/icons/calendar.png",
+        "selectedIconPath": "assets/icons/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计",
+        "iconPath": "assets/icons/stats.png",
+        "selectedIconPath": "assets/icons/stats-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

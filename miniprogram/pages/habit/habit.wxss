@@ -1,0 +1,21 @@
+.page-title { font-size: var(--font-xl); font-weight: 700; margin-bottom: 24rpx; }
+.habit-list { display: flex; flex-direction: column; gap: 16rpx; }
+.habit-card { display: flex; justify-content: space-between; align-items: center; }
+.habit-header { display: flex; align-items: center; gap: 12rpx; flex: 1; }
+.habit-icon { font-size: 40rpx; }
+.habit-title { font-size: var(--font-md); font-weight: 600; }
+.streak { font-size: var(--font-sm); color: var(--danger); }
+.log-btn { font-size: var(--font-sm); padding: 8rpx 24rpx; border-radius: var(--radius-full); background: var(--primary); color: #fff; border: none; }
+.log-btn::after { border: none; }
+.log-btn.logged { background: var(--success); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.modal-content { width: 80vw; max-height: 80vh; overflow-y: auto; animation: scaleIn 0.2s ease; }
+.modal-title { font-size: var(--font-lg); font-weight: 700; margin-bottom: 24rpx; text-align: center; }
+.form-label { font-size: var(--font-sm); color: var(--text-secondary); margin: 16rpx 0 8rpx; }
+.icon-grid { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.icon-option { font-size: 40rpx; padding: 8rpx; border-radius: var(--radius-md); border: 2rpx solid transparent; }
+.icon-option.selected { border-color: var(--primary); background: rgba(108,92,231,0.1); }
+.color-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.color-option { width: 56rpx; height: 56rpx; border-radius: 50%; border: 4rpx solid transparent; }
+.color-option.selected { border-color: #333; transform: scale(1.1); }

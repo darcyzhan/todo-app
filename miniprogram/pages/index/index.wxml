@@ -1,0 +1,182 @@
+<view class="page">
+  <!-- Stats Bar -->
+  <view class="stats-bar glass">
+    <view class="stat-item" bindtap="onFilterTap" data-key="today">
+      <text class="stat-value">{{stats.today_todo}}</text>
+      <text class="stat-label">今日待办</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item" bindtap="onFilterTap" data-key="overdue">
+      <text class="stat-value text-danger">{{stats.overdue}}</text>
+      <text class="stat-label">逾期</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item" bindtap="onFilterTap" data-key="done">
+      <text class="stat-value text-success">{{stats.week_done}}</text>
+      <text class="stat-label">本周完成</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value text-primary">{{stats.completion_rate}}%</text>
+      <text class="stat-label">完成率</text>
+    </view>
+  </view>
+
+  <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索任务..."
+        value="{{searchQuery}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+    </view>
+    <view class="view-toggle">
+      <text class="toggle-btn {{viewMode === 'list' ? 'active' : ''}}" bindtap="onViewModeChange" data-mode="list">☰</text>
+      <text class="toggle-btn" bindtap="onViewModeChange" data-mode="kanban">▦</text>
+      <text class="toggle-btn" bindtap="onViewModeChange" data-mode="calendar">📅</text>
+    </view>
+  </view>
+
+  <!-- Filter Chips -->
+  <scroll-view class="filter-chips" scroll-x>
+    <view class="chip-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="key"
+        class="chip {{currentFilter === item.key ? 'chip-active' : ''}}"
+        bindtap="onFilterTap"
+        data-key="{{item.key}}"
+      >
+        {{item.label}}
+      </view>
+      <view class="chip chip-outline" bindtap="onToggleFilterPanel">
+        ⚙️ 筛选
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Filter Panel -->
+  <view class="filter-panel {{showFilterPanel ? 'show' : ''}}" wx:if="{{showFilterPanel}}">
+    <view class="filter-section">
+      <text class="filter-title">优先级</text>
+      <view class="filter-options">
+        <view
+          class="chip {{selectedPriority === 'P0' ? 'chip-active priority-P0' : ''}}"
+          bindtap="onPriorityFilter" data-priority="P0"
+        >紧急</view>
+        <view
+          class="chip {{selectedPriority === 'P1' ? 'chip-active priority-P1' : ''}}"
+          bindtap="onPriorityFilter" data-priority="P1"
+        >高</view>
+        <view
+          class="chip {{selectedPriority === 'P2' ? 'chip-active priority-P2' : ''}}"
+          bindtap="onPriorityFilter" data-priority="P2"
+        >中</view>
+        <view
+          class="chip {{selectedPriority === 'P3' ? 'chip-active priority-P3' : ''}}"
+          bindtap="onPriorityFilter" data-priority="P3"
+        >低</view>
+      </view>
+    </view>
+    <view class="filter-section" wx:if="{{projects.length}}">
+      <text class="filter-title">项目</text>
+      <view class="filter-options">
+        <view
+          wx:for="{{projects}}"
+          wx:key="id"
+          class="chip {{selectedProject === item.id ? 'chip-active' : ''}}"
+          bindtap="onProjectFilter"
+          data-id="{{item.id}}"
+        >{{item.icon}} {{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Multi-select toolbar -->
+  <view class="multi-select-bar" wx:if="{{isMultiSelect}}">
+    <text class="multi-select-info">已选 {{selectedTaskIds.size}} 项</text>
+    <view class="multi-select-actions">
+      <button class="btn-sm btn-success" bindtap="onBatchDone">批量完成</button>
+      <button class="btn-sm btn-danger" bindtap="onBatchDelete">批量删除</button>
+      <button class="btn-sm" bindtap="exitMultiSelect">取消</button>
+    </view>
+  </view>
+
+  <!-- Task List -->
+  <view class="task-list">
+    <view
+      wx:for="{{tasks}}"
+      wx:key="id"
+      class="task-card card animate-fadeIn {{item.status === 'done' ? 'task-done' : ''}} {{selectedTaskIds.has(item.id) ? 'task-selected' : ''}}"
+      bindtap="onTaskTap"
+      bindlongpress="onTaskLongPress"
+      data-id="{{item.id}}"
+    >
+      <!-- Checkbox -->
+      <view
+        class="task-checkbox {{item.status === 'done' ? 'checked' : ''}}"
+        catchtap="onToggleComplete"
+        data-id="{{item.id}}"
+        data-status="{{item.status}}"
+      >
+        <text wx:if="{{item.status === 'done'}}" class="check-icon animate-checkmark">✓</text>
+      </view>
+
+      <!-- Content -->
+      <view class="task-content">
+        <view class="task-header">
+          <text class="task-title ellipsis">{{item.title}}</text>
+          <view class="priority-badge priority-{{item.priority}}" wx:if="{{item.priority !== 'P2'}}">
+            {{item.priority_text}}
+          </view>
+        </view>
+
+        <view class="task-meta" wx:if="{{item.due_info || item.subtask_progress || item.tags.length}}">
+          <text class="task-due {{item.due_info.status === 'overdue' ? 'text-danger' : item.due_info.status === 'today' ? 'text-warning' : 'text-secondary'}}" wx:if="{{item.due_info}}">
+            📅 {{item.due_info.text}}
+          </text>
+          <text class="task-subtasks text-secondary" wx:if="{{item.subtask_progress}}">
+            ☑ {{item.subtask_progress}}
+          </text>
+        </view>
+
+        <view class="task-tags" wx:if="{{item.tags.length}}">
+          <view
+            wx:for="{{item.tags}}"
+            wx:for-item="tag"
+            wx:key="id"
+            class="tag-chip"
+            style="background: {{tag.color}}20; color: {{tag.color}};"
+          >
+            {{tag.icon || ''}} {{tag.name}}
+          </view>
+        </view>
+      </view>
+
+      <!-- Status indicator -->
+      <view class="task-status-dot status-{{item.status}}"></view>
+    </view>
+  </view>
+
+  <!-- Empty State -->
+  <view class="empty-state" wx:if="{{!loading && tasks.length === 0}}">
+    <text class="empty-state-icon">📝</text>
+    <text class="empty-state-text">
+      {{currentFilter === 'all' ? '还没有任务，点击 + 创建一个吧' : '没有符合筛选条件的任务'}}
+    </text>
+  </view>
+
+  <!-- Loading -->
+  <view class="loading-more" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- FAB -->
+  <view class="fab" bindtap="onCreateTask">+</view>
+</view>

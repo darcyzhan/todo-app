@@ -1,0 +1,50 @@
+<view class="page focus-page">
+  <!-- Timer Circle -->
+  <view class="timer-container">
+    <view class="timer-circle {{isRunning ? 'running' : ''}}">
+      <text class="timer-time">{{Math.floor(remainingSeconds / 60)}}:{{remainingSeconds % 60 < 10 ? '0' : ''}}{{remainingSeconds % 60}}</text>
+      <text class="timer-label" wx:if="{{isRunning}}">专注中</text>
+      <text class="timer-label" wx:else>准备开始</text>
+    </view>
+    <view class="progress-ring">
+      <view class="progress-track"></view>
+      <view class="progress-fill" style="transform: rotate({{(1 - remainingSeconds / totalSeconds) * 360}}deg)"></view>
+    </view>
+  </view>
+
+  <!-- Task -->
+  <view class="focus-task" wx:if="{{taskTitle}}">
+    <text class="focus-task-label">正在专注</text>
+    <text class="focus-task-title">{{taskTitle}}</text>
+  </view>
+
+  <!-- Pomodoro Count -->
+  <view class="pomodoro-count">
+    <text wx:for="{{completedPomodoros}}" wx:key="*this">🍅</text>
+  </view>
+
+  <!-- Controls -->
+  <view class="focus-controls">
+    <button class="control-btn" wx:if="{{!isRunning}}" bindtap="onStart">▶ 开始专注</button>
+    <button class="control-btn pause" wx:if="{{isRunning && !isPaused}}" bindtap="onPause">⏸ 暂停</button>
+    <button class="control-btn" wx:if="{{isRunning && isPaused}}" bindtap="onResume">▶ 继续</button>
+    <button class="control-btn stop" wx:if="{{isRunning}}" bindtap="onStop">⏹ 停止</button>
+  </view>
+
+  <!-- Settings -->
+  <view class="focus-settings" wx:if="{{!isRunning}}">
+    <view class="setting-row">
+      <text class="setting-label">时长（分钟）</text>
+      <slider min="5" max="120" step="5" value="{{focusDuration}}" bindchange="onDurationChange" activeColor="#6C5CE7" />
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">白噪音</text>
+      <view class="sound-options">
+        <text class="sound-btn {{soundType === 'rain' ? 'active' : ''}}" bindtap="onSoundChange" data-type="rain">🌧</text>
+        <text class="sound-btn {{soundType === 'wave' ? 'active' : ''}}" bindtap="onSoundChange" data-type="wave">🌊</text>
+        <text class="sound-btn {{soundType === 'cafe' ? 'active' : ''}}" bindtap="onSoundChange" data-type="cafe">☕</text>
+        <text class="sound-btn {{soundType === 'none' ? 'active' : ''}}" bindtap="onSoundChange" data-type="none">🔇</text>
+      </view>
+    </view>
+  </view>
+</view>
