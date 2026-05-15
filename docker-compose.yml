@@ -4,7 +4,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8000:8000"
+      - "51200:51200"
     environment:
       - DATABASE_URL=sqlite+aiosqlite:///./todomaster.db
       - SECRET_KEY=change-this-in-production-2026-todomaster

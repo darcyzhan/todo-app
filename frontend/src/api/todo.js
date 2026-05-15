@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useAuth } from '../composables/useAuth'
 
-const API_BASE = 'http://localhost:8000/api/v1/tasks'
+const API_BASE = 'http://localhost:51200/api/v1/tasks'
 
 function authHeaders() {
   const { getAuthHeader } = useAuth()

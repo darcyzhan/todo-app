@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import axios from 'axios'
 
-const API_BASE = 'http://localhost:8000/api/v1/auth'
+const API_BASE = 'http://localhost:51200/api/v1/auth'
 
 const token = ref(localStorage.getItem('access_token') || '')
 const refreshToken = ref(localStorage.getItem('refresh_token') || '')
