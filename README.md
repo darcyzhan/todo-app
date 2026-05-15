@@ -19,7 +19,7 @@ todo-app/
 ### 1. 启动后端
 
 ```bash
-cd backend
+# 在项目根目录下操作
 
 # 创建并激活虚拟环境（推荐）
 python -m venv .venv
@@ -29,9 +29,10 @@ python -m venv .venv
 source .venv/bin/activate
 
 # 安装依赖
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 
-# 启动服务（端口 51200）
+# 从 backend 目录启动服务（端口 51200）
+cd backend
 uvicorn app.main:app --reload --port 51200
 ```
 
